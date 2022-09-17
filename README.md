@@ -7,3 +7,14 @@
 4. 리스트 삭제 버튼 구현
 
 -이것은 스터디그룹 팀원들과 처음 만든 프로젝트입니다.
+
+
+
+
+![2022-09-18 (9)](https://user-images.githubusercontent.com/113274559/190876803-b7b27df5-bbb9-4b48-81e7-07fc72a56ec7.png)
+
+
+![2022-09-18 (10)](https://user-images.githubusercontent.com/113274559/190876806-451fc549-4e75-4022-8790-0d7304c2678f.png)
+
+
+![2022-09-18 (11)](https://user-images.githubusercontent.com/113274559/190876807-43741ee8-be90-4d89-a78a-0595dfe9ecd3.png)
