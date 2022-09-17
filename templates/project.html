@@ -32,7 +32,6 @@
             color: white;
         }
 
-
         .post-box {
             margin: 15px auto 10px auto;
             max-width: 700px;
@@ -80,6 +79,42 @@
             margin-right: 10px;
         }
 
+        .btn1 {
+              font-family: 'Do Hyeon', sans-serif;
+              text-decoration: none;
+              font-size: 15px;
+              background-color: darkgray;
+              color: white;
+              padding: 4px 10px 4px 10px;
+              margin: 20px;
+              display: inline-block;
+              border-radius: 10px;
+              transition: all 0.1s;
+              border-bottom: 5px solid gray;
+          }
+          .btn1:active{
+              transform: translateY(3px);
+              border-bottom: 2px solid gray;
+          }
+
+          .btn{
+              font-family: 'Do Hyeon', sans-serif;
+              text-decoration: none;
+              font-size: 15px;
+              background-color: darkgray;
+              color: white;
+              padding: 4px 10px 4px 10px;
+              margin: 10px;
+              display: inline-block;
+              border-radius: 10px;
+              transition: all 0.1s;
+              border-bottom: 5px solid gray;
+          }
+          .btn:active{
+              transform: translateY(3px);
+              border-bottom: 2px solid gray;
+          }
+
     </style>
 
         <script>
@@ -107,6 +142,7 @@
                     success: function (response) {
                         let rows = response['orders']
                         for (let i = 0; i < rows.length; i++) {
+                            let num = rows[i]['num']
                             let title = rows[i]['title']
                             let place = rows[i]['place']
                             let commend = rows[i]['commend']
@@ -114,6 +150,7 @@
                             let chair2 = rows[i]['chair2']
                             let star = rows[i]['star']
                             let star_image = '⭐'.repeat(star)
+
 
                             let temp_html = `<div class="post-box">
                                               <div class="card-header">롯데시네마 -  ${place}</div>
@@ -132,8 +169,7 @@
                                                   <hr style="border:1px; color: silver; width="100%;"></p>
 
                                                   <p style="line-height: 0px;">
-                                                  <button type="button" class="btn btn-outline-dark" style="margin-left: 520px; line-height: 10px ">수정</button>
-                                                  <button type="button" class="btn btn-outline-dark" style="line-height: 10px;">삭제</button> </cite>
+                                                  <button type="button" onclick="del_comment(${num})" class="btn btn-outline-dark" style="margin-left: 570px; line-height: 10px;">삭제</button> </cite>
                                                   </p>
                                                 </blockquote>
                                               </div>
@@ -194,6 +230,17 @@
                  });
              }
 
+             function del_comment(num){
+                $.ajax({
+                     type: "POST",
+                     url: "/project/delete",
+                     data: {num_give:num},
+                     success: function (response) {
+                     alert(response["msg"])
+                     window.location.reload()
+                     }
+                });
+             }
 
 
         </script>
@@ -202,6 +249,13 @@
 <title></title>
 <body>
     <div class="mytitle">
+        <div class="btn-group-lg" role="group" aria-label="Basic outlined example">
+         <a class="btn1"   href="#">홈페이지</a>
+            <a class="btn1" href="#">CGV</a>
+            <a class="btn1"  href="#">메가박스</a>
+            <a class="btn1"  href="#">기타1</a>
+            <a class="btn1"  href="#">기타2</a>
+        </div>
         <h1>롯데시네마 좌석 추천 후기 게시판</h1>
         <button onclick="open_box()">좌석 후기 남기기!</button>
     </div>
