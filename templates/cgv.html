@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <title>CGV 좌석 후기 게시판</title>
+
+    <style>
+        .header {
+            width: 100%;
+            height: 200px;
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://cdn.pixabay.com/photo/2020/01/21/20/27/theater-4783908_960_720.jpg');
+            background-position: center;
+            background-size: cover;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header.h1 {
+            margin-top: 20px;
+        }
+
+        .header > button {
+            text-align: center;
+            display: inline-block;
+
+
+        }
+
+        .section {
+            width: 100%;
+            box-shadow: 0px 0px 3px 0px gray;
+            margin: 10px auto 0px auto;
+            padding: 20px;
+
+        }
+
+        .board2 {
+            width: 100%;
+            margin: 10px auto 0px auto;
+        }
+
+        .board2 th, .board2 td {
+            border: 1px solid black;
+            border-width: 1px 0;
+            border-collapse: collapse;
+            text-align: center;
+            padding: 8px;
+        }
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            show_order();
+        });
+
+        function show_order() {
+            $.ajax({
+                type: 'GET',
+                url: '/cgv/seat',
+                data: {},
+                success: function (response) {
+                    let rows = response['orders']
+                    for (let i = 0; i < rows.length; i++) {
+                        let address = rows[i]['address']
+                        let name = rows[i]['name']
+                        let number = rows[i]['number']
+                        let score = rows[i]['score']
+                        let content = rows[i]['content']
+                        let num = rows[i]['num']
+
+                        let temp_html = `<tr>
+                                            <td>${address}</td>
+                                            <td>${name}</td>
+                                            <td>${number}</td>
+                                            <td>${score}</td>
+                                            <td>${content}</td>
+                                            <td><button type="button" onclick="delete_button(${num})">삭제</button></td>
+                                         </tr>`
+
+
+                        $('#board-box').append(temp_html)
+
+                    }
+                }
+            });
+        }
+
+        function save_order() {
+            let address = $('#address').val()
+            let name = $('#name').val()
+            let number = $('#number').val()
+            let score = $('#score').val()
+            let content = $('#content').val()
+
+            if (address == "") {
+                alert('작성해주세요!');
+                return false;
+            }
+            if (name == "") {
+                alert('작성해주세요!');
+                return false;
+            }
+            if (number == "") {
+                alert('작성해주세요!');
+                return false;
+            }
+            if (score == "") {
+                alert('작성해주세요!');
+                return false;
+            }
+            if (content == "") {
+                alert('작성해주세요!');
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/cgv/seat",
+                data: {
+                    address_give: address,
+                    name_give: name,
+                    number_give: number,
+                    score_give: score,
+                    content_give: content
+                },
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload() //새로고침
+                }
+            });
+        }
+
+        function delete_button(num) {
+            $.ajax({
+                type: "POST",
+                url: "/cgv/seat/delete",
+                data: {'num_give': num},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+
+        }
+    </script>
+</head>
+
+<body>
+<div class="header">
+    <h1>CGV 좌석 추천 게시판</h1>
+    <div class header_button>
+        <a href='/'>
+            <button>홈</button>
+        </a>
+        <a href='/lotte'>
+            <button>롯데시네마</button>
+        </a>
+        <a href='/megabox'>
+            <button>메가박스</button>
+        </a>
+        <a href='/extra'>
+            <button>독립영화관</button>
+        </a>
+        <a href='/concert'>
+            <button>공연장</button>
+        </a>
+    </div>
+</div>
+<div class="section" id="post_box">
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="address" placeholder="name@example.com">
+        <label for="address" id="add">자주가는 CGV</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="name" placeholder="name@example.com">
+        <label for="name" id="nam">영화제목</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="number" placeholder="name@example.com">
+        <label for="number" id="num">상영관/열/좌석번호</label>
+    </div>
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="score" id="sco">좌석평점</label>
+        <select class="form-select" id="score">
+            <option selected>-- 선택하기 --</option>
+            <option value="⭐">⭐</option>
+            <option value="⭐⭐">⭐⭐</option>
+            <option value="⭐⭐⭐">⭐⭐⭐</option>
+            <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
+            <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
+        </select>
+    </div>
+    <div class="form-floating">
+        <textarea class="form-control" placeholder="Leave a comment here" id="content"
+                  style="height: 100px"></textarea>
+        <label for="content" id="con">Comments</label>
+    </div>
+    <button onclick="save_order()" type="button">등록하기</button>
+</div>
+</div>
+<table class="board2">
+    <thead>
+    <tr>
+        <th>지역/영화관</th>
+        <th>영화제목</th>
+        <th>상영관 자리</th>
+        <th>별점</th>
+        <th>후기내용</th>
+        <th>삭제</th>
+
+    </tr>
+    </thead>
+    <tbody id="board-box">
+    </tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

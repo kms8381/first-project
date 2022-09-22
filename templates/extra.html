@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <title>독립영화관 좌석 후기 게시판</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+        .background {
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://cdn.pixabay.com/photo/2020/01/21/20/27/theater-4783908_960_720.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .title-box {
+            width: 100%;
+            height: 200px;
+            background-color: rgba(0, 0, 0, 0.5);
+
+            color: white;
+
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title-box > tt-box {
+            flex-wrap: wrap;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .boxes {
+            flex-wrap: wrap;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .boxes > nav {
+            position: sticky;
+            padding:10px;
+        }
+
+        .boxes > .post-box {
+            margin: 20px;
+            float: left;
+            max-width: 400px;
+            width: 95%;
+            height: 100%;
+            margin-top: 20px;
+            color: white;
+        }
+
+        .boxes > .get-box {
+            margin: 20px;
+            float: right;
+            max-width: 400px;
+            width: 90%;
+            max-height: 600px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+        }
+
+        .boxes > .post-box > .write-box {
+            padding: 5px;
+        }
+
+        .boxes > .post-box > .write-box > .mb-3 {
+            margin: 10px;
+            width: 95%;
+        }
+
+        .boxes > .post-box > .write-box > .buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin-right: 30px;
+        }
+
+        .boxes > .get-box > .titletext {
+            background-color: transparent;
+            flex-wrap: wrap;
+            width: 100%;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            padding: 5px;
+            overflow: unset;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cards {
+            background-color: transparent;
+            box-sizing: content-box;
+            width: 95%;
+            overflow: auto;
+
+        }
+
+        .table-card {
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 50px;
+            height: 100%;
+
+        }
+
+        table {
+            color: black;
+            display: -webkit-box;
+            position: relative;
+            width: 320px;
+            height: 150px;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+        }
+
+        tbody {
+            display: flex;
+            margin-left: 10px;
+            text-align: left;
+            max-width: 250px;
+            max-height: 110px;
+        }
+
+        .comments {
+            display: flex;
+            text-align: left;
+            max-width: 250px;
+            max-height: 45px;
+            word-break: break-all;
+            overflow: auto;
+        }
+
+        th {
+            display: block;
+        }
+
+        td {
+            display: block;
+        }
+
+
+
+
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            listing()
+        })
+        function listing() {
+            $.ajax({
+                type: 'GET',
+                url: '/extra/seat',
+                data: {},
+                success: function (response) {
+                    let rows = response['rast']
+                    for(let i = 0; i < rows.length; i++){
+                        let theater = rows[i]['theater']
+                        let title = rows[i]['title']
+                        let seat = rows[i]['seat']
+                        let star = rows[i]['star']
+                        let comment = rows[i]['comment']
+
+                        let star_image = '⭐'.repeat(star)
+
+                        let temp_html = `       <div class="table-card">
+                                                 <table>
+                                                    <thead>
+                                                    <tr>
+                                                        <th>영화관명</th>
+                                                        <th>영화제목</th>
+                                                        <th>좌석위치</th>
+                                                        <th>좌석평점</th>
+                                                        <th>좌석후기</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <th>${theater}</th>
+                                                        <td>${title}</td>
+                                                        <td>${seat}</td>
+                                                        <td>${star_image}</td>
+                                                        <td class="comments">${comment}
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+
+                                                </table>
+                                                </div>
+                                            `
+
+                        $('#table-cards').append(temp_html)
+                    }
+                }
+            });
+        }
+
+        function posting() {
+                let theater = $('#theater').val()
+                let title = $('#title').val()
+                let seat = $('#seat').val()
+                let star = $('#star').val()
+                let comment = $('#comment').val()
+
+            if(theater,title,seat,comment == '' ){
+                alert('입력해주세요!')
+                return false;
+            }
+
+            if(star == '평점 선택하기'){
+                alert('선택해주세요!')
+                return false;
+            }
+
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/extra/seat',
+                data: {theater_give: theater, title_give: title, seat_give: seat, star_give: star, comment_give: comment},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            });
+        }
+
+    </script>
+</head>
+<body class="background">
+<div class="title-box">
+    <div class="tt-box">
+        <h1>독립영화관</h1>
+        <h3>좌석 시야 후기 게시판</h3>
+        <p>멀티플렉스 영화관이 아닌 그 외의 영화관 좌석 정보를 공유해주세요.</p>
+    </div>
+</div>
+<div class="boxes">
+    <div class="nav">
+     <div class="btn-group-vertical">
+         <a href='/' class="btn btn-light active" aria-current="page">Home</a>
+         <a href='/lotte' class="btn btn-light">LOTTE CINEMA</a>
+         <a href='/megabox' class="btn btn-light">MEGABOX</a>
+         <a href='/cgv' class="btn btn-light">CGV</a>
+         <a href='/concert' class="btn btn-light">CONCERT HALL</a>
+      </div>
+    </div>
+    <div class="post-box">
+        <h3 style="text-align:center;">영화관 좌석 후기 남기기</h3>
+        <div class="write-box">
+            <div class="mb-3">
+                <label for="theater"  class="form-label" style="color:white;">영화관명</label>
+                <input type="text" class="form-control" id="theater"
+                       >
+            </div>
+            <div class="mb-3">
+                <label for="title"  class="form-label" style="color:white;">영화제목</label>
+                <input type="text" class="form-control" id="title"
+                       placeholder=>
+            </div>
+            <div class="mb-3">
+                <label for="seat"  class="form-label" style="color:white;">좌석위치</label>
+                <input type="text" class="form-control" id="seat"
+                       >
+            </div>
+            <div class="input-group mb-3" style="display: flex; flex-direction: column;">
+                <label style="color:white;">좌석평점</label>
+                <select class="form-select" id="star" style="width: 100%; margin-top: 10px;">
+                    <option selected>평점 선택하기</option>
+                    <option value="1">⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                </select>
+            </div>
+            <div class="mb-3" style="display: flex; flex-direction: column;">
+                <label style="color:white;">좌석후기</label>
+                <div class="form-floating">
+                  <textarea class="form-control"  id="comment"
+                            style="height: 100px;margin-top: 10px;"></textarea>
+                </div>
+            </div>
+            <div class="buttons">
+                <button onclick="posting()" type="button" class="btn btn-outline-secondary">후기남기기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="get-box">
+        <div class="titletext">
+            <h3>후기 게시판</h3>
+        </div>
+        <div class="cards" id="table-cards">
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

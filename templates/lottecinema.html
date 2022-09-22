@@ -15,7 +15,7 @@
 
      <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 
-        <title>롯데시네마 좌석 추천 후기 게시판</title>
+        <title>롯데시네마 좌석 후기 게시판</title>
 
     <style>
         .mytitle {
@@ -137,7 +137,7 @@
             function show_order() {
                 $.ajax({
                     type: "GET",
-                    url: "/project",
+                    url: "/lotte/seat",
                     data: {},
                     success: function (response) {
                         let rows = response['orders']
@@ -213,7 +213,7 @@
 
                  $.ajax({
                      type: "POST",
-                     url: "/project",
+                     url: "/lotte/seat",
                      data: { title_give:title,
                              commend_give:commend,
                              place_give:place,
@@ -233,7 +233,7 @@
              function del_comment(num){
                 $.ajax({
                      type: "POST",
-                     url: "/project/delete",
+                     url: "/lotte/seat/delete",
                      data: {num_give:num},
                      success: function (response) {
                      alert(response["msg"])
@@ -250,11 +250,11 @@
 <body>
     <div class="mytitle">
         <div class="btn-group-lg" role="group" aria-label="Basic outlined example">
-         <a class="btn1"   href="#">홈페이지</a>
-            <a class="btn1" href="#">CGV</a>
-            <a class="btn1"  href="#">메가박스</a>
-            <a class="btn1"  href="#">기타1</a>
-            <a class="btn1"  href="#">기타2</a>
+         <a class="btn1" onclick="window.location.href='/'">홈페이지</a>
+            <a class="btn1" onclick="window.location.href='/megabox'">메가박스</a>
+            <a class="btn1"  onclick="window.location.href='/cgv'">CGV</a>
+            <a class="btn1"  onclick="window.location.href='/extra'">독립 영화관</a>
+            <a class="btn1" onclick="window.location.href='/concert'">공연장</a>
         </div>
         <h1>롯데시네마 좌석 추천 후기 게시판</h1>
         <button onclick="open_box()">좌석 후기 남기기!</button>
@@ -287,7 +287,7 @@
                         <option value="N">-N열-</option>
                         <option value="O">-O열-</option>
                     </select>
-                    <label for="floatingInputGrid">좌석</label>
+                    <label for="chair">좌석</label>
                 </div>
             </div>
             <div class="col-md">
@@ -318,16 +318,16 @@
                         <option value="22">-22-</option>
 
                     </select>
-                    <label for="floatingInputGrid">좌석</label>
+                    <label for="chair2">좌석</label>
                 </div>
             </div>
 
             <div class="form-floating">
                 <textarea class="form-control" placeholder="Leave a comment here" id="title"></textarea>
-                <label for="floatingInput">영화 제목</label>
+                <label for="title">영화 제목</label>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text" for="inputGroupSelect01">좌석 평점</label>
+                <label class="input-group-text" for="star">좌석 평점</label>
                 <select class="form-select" id="star">
                     <option selected>-- 선택하기 --</option>
                     <option value="1">⭐</option>
@@ -340,7 +340,7 @@
             <div class="form-floating">
                 <textarea class="form-control" placeholder="Leave a comment here" id="commend"
                           style="height: 100px"></textarea>
-                <label for="floatingTextarea2">후기를 자유롭게 작성 하시오</label>
+                <label for="commend">후기를 자유롭게 작성 하시오</label>
             </div>
             <div class="mybutton">
                 <button onclick="save_order()" type="button" class="btn btn-outline-dark">입력</button>

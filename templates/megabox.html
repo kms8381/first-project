@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>메가박스 좌석 후기 게시판</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&display=swap" rel="stylesheet">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            color: #fff;
+            font-family: 'IBM Plex Sans KR', sans-serif;
+        }
+
+        input, select, textarea {
+            display: inline-block;
+            border: none;
+            color: #555;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+        }
+
+        label, button {
+            display: inline-block;
+            border: 1px solid #555;
+            border-radius: 7px;
+            margin: 5px;
+            font-size: 14px;
+            background-color: #555;
+        }
+
+        ul, li {
+            text-decoration: none;
+            list-style: none;
+        }
+
+        #wrap {
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://cdn.pixabay.com/photo/2020/01/21/20/27/theater-4783908_960_720.jpg");
+            background-size: cover;
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        h1 {
+            width: 100%;
+            height: 18vh;
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .board {
+            width: 60%;
+            min-width: 800px;
+            height: 70vh;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: flex-start;
+            margin-bottom: 5vh;
+        }
+
+        .form-info > label, textarea {
+            background-color: #fff;
+            color: #555;
+        }
+
+        #form-all {
+            width: 45%;
+            height: 70vh;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        .form-info {
+            width: 90%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        label {
+            width: 90%;
+            padding: 10px;
+        }
+
+        .input-star {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 7px;
+            margin: 10px;
+            font-size: 13px;
+        }
+
+        .input-star > label {
+            padding: 0;
+            margin: 0;
+            border: none;
+            width: auto;
+            background-color: #fff;
+            color: #555;
+        }
+
+        .form-select {
+            text-align: center;
+            background-color: #fff;
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            margin: 10px 0 0 0;
+            resize: none;
+            overflow-y:scroll;
+        }
+
+        textarea::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #2f3542;
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background-color: grey;
+        }
+
+        .form-info > button {
+            width: 95%;
+            padding: 10px;
+        }
+
+        .col {
+            width: 45%;
+            height: 70vh;
+            padding: 20px 10px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        h3 {
+            color: #555;
+            width: 100%;
+            text-align: center;
+            font-size: 25px;
+        }
+
+        .review {
+            font-size: 14px;
+            border-radius: 15px;
+            background-color: #555;
+            padding: 24px 30px;
+            box-sizing: border-box;
+            margin: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            width: 90%;
+
+        }
+
+        .review-list {
+            width: 86%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            overflow: auto;
+            overflow-y:scroll;
+        }
+
+        .review-list::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .review-list::-webkit-scrollbar-thumb {
+            background-color: #2f3542;
+        }
+
+        .review-list::-webkit-scrollbar-track {
+            background-color: grey;
+        }
+
+        .edit-btn {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .edit-btn > button {
+            width: 50px;
+            height: auto;
+            padding: 1px;
+            box-sizing: border-box;
+            border: 1px solid #fff;
+            background-color: #fff;
+            color: #555;
+        }
+
+        .review-body {
+            margin: 12px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: flex-start;
+        }
+
+        .review-info > ul {
+            width: 200px;
+            padding: 0;
+            margin-bottom: 15px;
+
+        }
+
+        .review-info > ul > li {
+            margin: 3px 0;
+            width: 220px;
+        }
+
+        .review-info > ul > li > span {
+            width: 75px;
+            display: inline-block;
+        }
+
+        .review-text {
+            width: 100%;
+            height: 60px;
+            overflow: auto;
+        }
+
+        .review-text::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .review-text::-webkit-scrollbar-thumb {
+            background-color: #2f3542;
+        }
+
+        .review-text::-webkit-scrollbar-track {
+            background-color: grey;
+        }
+
+        .nav-btn {
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            left: 2vh;
+            top: 20vh;
+        }
+
+        .nav-btn > button {
+            width: 100px;
+            height: 45px;
+            background-color: #fff;
+            color: #555;
+            font-size: 13px;
+        }
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            show_enter();
+        });
+
+        function show_enter() {
+            $.ajax({
+                type: 'GET',
+                url: '/megabox/seat',
+                data: {},
+                success: function (response) {
+                    let rows = response['seats']
+                    for (let i = 0; i < rows.length; i++) {
+                        let name = rows[i]['name']
+                        let seat = rows[i]['seat']
+                        let movie = rows[i]['movie']
+                        let star = rows[i]['star']
+                        let review = rows[i]['review']
+                        let num = rows[i]['num']
+
+                        let star_image = '⭐'.repeat(star)
+
+                        let temp_html = `<div class="review">
+                                            <div class="review-body">
+                                                <div class="review-info">
+                                                    <ul>
+                                                        <li><span>지점명 </span>${name}</li>
+                                                        <li><span>좌석명 </span>${seat}</li>
+                                                        <li><span>영화 제목 </span>${movie}</li>
+                                                        <li><span>좌석 평점 </span>${star_image}</li>
+                                                    </ul>
+                                                </div>
+                                                <p class="review-text">${review}</p>
+                                            </div>
+                                            <div class="edit-btn">
+                                                <button onclick="delete_review(${num})" type="button" class="btn btn-outline-primary">삭제</button>
+                                            </div>
+                                        </div>`
+
+                        $('#review-list').append(temp_html)
+                    }
+                }
+            });
+        }
+
+        function save_enter() {
+            let name = $('#cinema-name').val()
+            let seat = $('#seat-name').val()
+            let movie = $('#movie-title').val()
+            let star = $('#star').val()
+            let review = $('#review-text').val()
+
+            if (name == "") {
+                alert('영화관명을 입력하세요')
+                return false;
+            }
+            if (seat == "") {
+                alert('좌석명을 입력하세요')
+                return false;
+            }
+            if (movie == "") {
+                alert('영화명을 입력하세요')
+                return false;
+            }
+            if (star == "-- 별점 선택하기 --") {
+                alert('별점을 선택하세요')
+                return false;
+            }
+            if (review == "") {
+                alert('좌석 리뷰를 입력하세요')
+                return false;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/megabox/seat',
+                data: {
+                    name_give: name,
+                    seat_give: seat,
+                    movie_give: movie,
+                    star_give: star,
+                    review_give: review
+                },
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            });
+
+        }
+
+        function delete_review(num) {
+            $.ajax({
+                type: "POST",
+                url: "/megabox/seat/delete",
+                data: {'num_give': num},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+
+        }
+
+    </script>
+</head>
+<body>
+<div id="wrap">
+    <h1>메가박스 좌석 추천 후기 게시판</h1>
+    <div class="board">
+        <form id="form-all" name="formAll">
+            <h3>메가박스 좌석 입력</h3>
+            <div class="form-info">
+                <label for="cinema-name">지점명 : <input id="cinema-name" name="inputname" type="text"
+                                                      placeholder="ex) 강남, 성수"
+                                                      required>
+                </label>
+                <label for="seat-name">좌석명 : <input id="seat-name" name='inputseat' type="text" placeholder="ex) 2관 F13"
+                                                    required> </label>
+                <label for="movie-title">영화 제목 : <input id="movie-title" name='inputtitle' type="text"
+                                                        placeholder="영화제목"
+                                                        required>
+                </label>
+                <div class="input-star">
+                    <label for="star">좌석 평점 : </label>
+                    <select class="form-select" id="star">
+                        <option slected>-- 별점 선택하기 --</option>
+                        <option value="1">⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                    </select>
+                </div>
+                <label for="review-text">후기 <br> <textarea id="review-text" cols="40" rows="5" name="inputreview"
+                                                           placeholder="좌석 후기에 대해 간단하게 알려주세요" required
+                                                           maxlength="300"></textarea> </label>
+                <button type="button" onclick="save_enter()">입력</button>
+            </div>
+        </form>
+        <div class="col">
+            <h3>후기 게시판</h3>
+            <div class="review-list" id="review-list">
+                <!--                <div class="review">-->
+                <!--                    <div class="review-body">-->
+                <!--                        <div class="review-info">-->
+                <!--                            <ul>-->
+                <!--                                <li>지점명</li>-->
+                <!--                                <li>좌석명</li>-->
+                <!--                                <li>영화제목</li>-->
+                <!--                                <li>좌석평점</li>-->
+                <!--                            </ul>-->
+                <!--                        </div>-->
+                <!--                        <p class="review-text">후기 내용입니다.후기 내용입니다.후기 내용입니다.후기 내용입니다.</p>-->
+                <!--                    </div>-->
+                <!--                    <div class="edit-btn">-->
+                <!--                        <button onclick="modify_review()" class="modify">수정</button>-->
+                <!--                        <button onclick="delete_review()" class="delete">삭제</button>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </div>
+
+        </div>
+    </div>
+    <nav class="nav-btn">
+        <button id="home" onclick="window.location.href='/'">HOME</button>
+        <button id="lotte" onclick="window.location.href='/lotte'">LOTTE<br>CINEMA</button>
+        <button id="cgv" onclick="window.location.href='/cgv'">CGV</button>
+        <button id="extra" onclick="window.location.href='/extra'">INDEPENDENT<br>CINEMA</button>
+        <button id="concert" onclick="window.location.href='/concert'">CONCERT<br>HALL</button>
+    </nav>
+</div>
+</body>
+</html>
